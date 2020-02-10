@@ -1,0 +1,139 @@
+---
+
+- hosts: all
+  tasks:
+          - name: iam craeting a new file
+            file:
+                    path: "/home/ubuntu/pro/devops.txt"
+                    state: touch
+
+  ansible-playbook ansible.yml --private.key=tomcat.pem --syntax-check ----> it will checks the syntax formation of the play book
+  ansible-playbook ansible.yml --private.key=tomcat.pem ---> it will execute the playbook
+          -----------------------------------------------------------------------------------------
+
+---
+                    - hosts: all
+                      tasks:
+                              - name: im creating some new file and create content intaht file.
+                                copy:
+                                        dest: "/usr/local/pro/new_txt.file"
+                                        content:
+                                                manoj
+                                                devops engineer
+                                                banglore
+
+   ansible-playbook ansible.yml --private.key=tomcat.pem
+                                       ---------------------------
+  NOw i want to craete a 3log files at a time in the pro dir & configure the permissions also??
+
+---
+                              - hosts: all
+                                tasks:
+                                        - name: im creating new logfiles in the pro dir
+                                          file:
+                                                  path: "/usr/local/pro/{{ items }}"
+                                                  state: touch
+                                                  mode: 0755
+                                with_items:
+                                        - first.log
+                                        - second.log
+                                        - third.log
+
+ ansible-playbook ansible.yml --private.key=tomcat.pem
+   ansible-playbook ansible.yml -i /etc/ansible/hosts --private.key=tomcat.pem
+   -i /etc/ansible/hosts---------------> its is an ansible inventory file,we can cretae custom invertory file also....
+ ansible-playbook ansible.yml -u server-4 -i /etc/ansible/hosts --private.key=tomcat.pem --> it will execute the playbook only for that server-4 user only by using the above cmnd.....
+
+-------------------------------------------------------------------------------------------------------------------
+---
+- hosts: all
+  tasks:
+          - name: i'm creating multiple files and configure the permissions individually
+            file:
+                    path: "/usr/local/pro{{ item.location }}"
+                    state: touch
+                    mode: "{{ item.mode }}"
+
+                    with_items:
+                            - {location: 'file1.txt',mode: 0755}
+                            - {location: 'file2.txt',mode: 0755}
+ ansible-playbook ansible1.yml --private.key=kmk.pem
+-------------------------------------------------------------------
+
+how to install git by using ansible playbook???
+
+vim git.yml
+---
+- hosts: all
+  become: yes
+  tasks: 
+      
+     - name: installing git
+       yum:
+       name: git
+       state: present
+
+ansible-playbook  git.yml --private.key=kmk.pem
+
+to uninstall the git  by using play-book
+
+---
+- hosts: all
+  become: yes----> giving root privillages yes
+  tasks:
+        - name: uninstalling the git
+          yum:
+          name: git
+          state: absent
+ansible-playbook  git.yml --private.key=kmk.pem
+--------------------------------------------------
+how to include  exclude the tags while installing the packages???
+
+vim git.yml
+---
+- hosts: all
+  become: yes
+  tasks: 
+      
+     - name: installing git
+       yum:
+       name: git
+       state: present
+         tags: install
+vim git.yml
+---
+- hosts: all
+  become: yes
+  tasks: 
+      
+     - name: installing git
+       yum:
+       name: git
+       state: present
+        tags: uninstall
+
+ansible-playbook git.yml --private.key=kmk.pem --skip-tags "uninstall"
+above the playbook will install the git ....
+--------------------------------------------------------------------------------------------
+how to install maven????
+vim maven.yml
+---
+- hosts: all
+  become: yes
+  tasks:
+     - name: downloading maven
+       shell:
+               wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
+               sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
+               yum install -y apache-maven
+ansible-playbook maven.yml --private-key=kmk.pem 
+----------------------------------------------------------------------------------------------
+waht is ansible roles???
+
+to dividing the palybook into number of playbooks that is ansible roles.
+
+
+
+
+
+
